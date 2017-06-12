@@ -2,10 +2,13 @@ package com.tanmay.entity;
 
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author : tanmay
  * @created : 12-Jun-2017
  */
+@XmlRootElement
 public class Bundle {
 	private String id;
 	private Map<String, String> filter;

@@ -24,6 +24,7 @@ import org.json.simple.parser.ParseException;
 
 import au.com.bytecode.opencsv.CSVReader;
 
+import com.google.gson.Gson;
 import com.tanmay.constants.Constants;
 import com.tanmay.entity.Bundle;
 
@@ -47,8 +48,8 @@ public class MainController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/convert")
-	public Response convert(Bundle bundle) {
-
+	public Response convert(String requestJson) {
+		Bundle bundle = new Gson().fromJson(requestJson,Bundle.class);
 		String csvFilePath = fetchCSVPath(bundle.getId());
 		CSVReader reader = null;
 		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
