@@ -1,5 +1,6 @@
 package com.tanmay.entity;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,13 +12,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Bundle {
 	private String id;
-	private Map<String, String> filter;
+	private Map<String, ArrayList<String>> filter;
+	private Boolean combination;
+	private ArrayList<Integer> columns;  
 
-	public Map<String, String> getFilter() {
+	public Map<String, ArrayList<String>> getFilter() {
 		return filter;
 	}
 
-	public void setFilter(Map<String, String> filter) {
+	public void setFilter(Map<String, ArrayList<String>> filter) {
 		this.filter = filter;
 	}
 
@@ -27,5 +30,21 @@ public class Bundle {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public Boolean getCombination() {
+		return combination;
+	}
+
+	public void setCombination(Boolean combination) {
+		this.combination = combination;
+	}
+
+	public ArrayList<Integer> getColumns() {
+		return columns;
+	}
+
+	public void setColumns(ArrayList<Integer> columns) {
+		this.columns = columns;
 	}
 }

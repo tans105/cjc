@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class MainController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/convert")
 	public Response convert(String requestJson) {
-		Bundle bundle = new Gson().fromJson(requestJson,Bundle.class);
+		Bundle bundle = new Gson().fromJson(requestJson, Bundle.class);
 		String csvFilePath = fetchCSVPath(bundle.getId());
 		CSVReader reader = null;
 		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
@@ -67,12 +68,49 @@ public class MainController {
 				for (int i = 0; i < headers.size(); i++) {
 					map.put(header[i], line[i]);
 				}
-				list.add(map);
+				if (applyFilters(bundle.getFilter(), map, bundle.getCombination())) {
+					if (null != bundle.getColumns()) {
+						for (int j = 0; j < header.length; j++) {
+							if(bundle.getColumns().contains(j)){
+								continue;
+							}
+							else{
+								map.remove(header[j]);
+							}
+						}
+					}
+					list.add(map);
+				} else
+					continue;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return Response.ok(createJson(list), MediaType.APPLICATION_JSON).build();
+	}
+
+	private Boolean applyFilters(Map<String, ArrayList<String>> filter, LinkedHashMap<String, String> map, Boolean combination) {
+		if (null == combination) {
+			combination = true;
+		}
+		Boolean passed = Boolean.FALSE;
+		if (!combination) {
+			for (Map.Entry<String, ArrayList<String>> e : filter.entrySet()) {
+				if (e.getValue().indexOf(map.get(e.getKey())) >= 0)
+					passed = Boolean.TRUE;
+				else {
+					passed = Boolean.FALSE;
+					break;
+				}
+			}
+		} else {
+			for (Map.Entry<String, ArrayList<String>> e : filter.entrySet()) {
+				if (e.getValue().indexOf(map.get(e.getKey())) >= 0)
+					passed = Boolean.TRUE;
+			}
+		}
+		return passed;
+
 	}
 
 	private String fetchCSVPath(String id) {
