@@ -1,5 +1,5 @@
-# CSV JSON Converter (cjc)
-Convert CSV to equivalent Json using Rest Based Web Service call
+# CSV to JSON Converter (cjc)
+Convert,filter and aggregate the CSV  and return the equivalent Json using Rest Based Web Service call
 
 Sample Request Json : 
 
